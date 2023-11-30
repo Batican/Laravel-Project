@@ -24,7 +24,9 @@ class ProductPolicy
      */
     public function view(User $user): bool
     {
-        //
+        return $user->hasPermissions([
+            'view-products'
+        ]);
     }
 
     /**

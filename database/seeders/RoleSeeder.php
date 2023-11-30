@@ -17,9 +17,10 @@ class RoleSeeder extends Seeder
         Role::upsert([
             ['name' => 'Admin', 'detail' => 'This is admin role'],
             ['name' => 'Customer', 'detail' => 'This is customer role'],
-           
+
         ], ['name'], ['detail']);
 
         Role::where('name', 'Admin')->first()->permissions()->attach(Permission::pluck('id')->toArray());
+        Role::where('name', 'Customer')->first()->permissions()->attach(Permission::where('slug', 'view-products')->pluck('id')->toArray());
     }
 }

@@ -25,6 +25,16 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function hasPermissions($permissionSlugs): bool
+    {
+        return $this->role->permissions()->whereIn('slug', $permissionSlugs)->exists();
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
     protected $hidden = [
         'password',
         'remember_token',

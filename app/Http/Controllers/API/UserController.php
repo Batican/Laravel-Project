@@ -12,7 +12,7 @@ class UserController extends BaseController
 {
     public function index(Request $request)
     {
-        // $this->authorize('viewAny', User::class);
+        $this->authorize('viewAny', User::class);
 
         $users = User::query();
 
@@ -43,7 +43,7 @@ class UserController extends BaseController
 
     public function store(Request $request): JsonResponse
     {
-        // $this->authorize('create', User::class);
+        $this->authorize('create', User::class);
 
         $input = $request->all();
 
@@ -65,7 +65,7 @@ class UserController extends BaseController
 
     public function show($id): JsonResponse
     {
-        // $this->authorize('viewAny', User::class);
+        $this->authorize('viewAny', User::class);
 
         $user = User::find($id);
 
@@ -78,7 +78,7 @@ class UserController extends BaseController
 
     public function update(Request $request, User $user)
     {
-        // $this->authorize('update', User::class);
+        $this->authorize('update', User::class);
 
         $input = $request->all();
 
@@ -117,7 +117,7 @@ class UserController extends BaseController
 
     public function destroy(User $user): JsonResponse
     {
-        // $this->authorize('delete', User::class);
+        $this->authorize('delete', User::class);
 
         $user->delete();
 

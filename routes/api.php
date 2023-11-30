@@ -27,12 +27,9 @@ Route::middleware('auth:api')->group(function () {
     Route::get('me', [AuthenticationController::class, 'me']);
     Route::post('logout', [AuthenticationController::class, 'logout']);
 
-    Route::middleware('isAdmin')->group(function () {
-        Route::resource('users', UserController::class);
-        Route::get('users-get-all', [UserController::class, 'getAll']);
-        Route::resource('products', ProductController::class);
-        Route::patch('users/assign-role/{user}', [UserController::class, 'assignRole']);
-    });
-    
+    Route::resource('users', UserController::class);
+    Route::get('users-get-all', [UserController::class, 'getAll']);
+    Route::patch('users/assign-role/{user}', [UserController::class, 'assignRole']);
+    Route::resource('products', ProductController::class);
     Route::get('products-get-all', [ProductController::class, 'getAll']);
 });

@@ -12,7 +12,7 @@ class ProductController extends BaseController
 {
     public function index(Request $request)
     {
-        // $this->authorize('viewAny', Product::class);
+        $this->authorize('view', Product::class);
 
         $users = Product::query();
 
@@ -38,12 +38,14 @@ class ProductController extends BaseController
 
     public function getAll()
     {
+        $this->authorize('view', Product::class);
+
         return Product::all();
     }
 
     public function store(Request $request): JsonResponse
     {
-        // $this->authorize('create', Product::class);
+        $this->authorize('create', Product::class);
 
         $input = $request->all();
 
@@ -51,7 +53,7 @@ class ProductController extends BaseController
             'name' => 'required',
             'description' => 'required',
             'price' => 'required',
-            
+
         ]);
 
         if ($validator->fails()) {
@@ -65,7 +67,7 @@ class ProductController extends BaseController
 
     public function show($id): JsonResponse
     {
-        // $this->authorize('viewAny', Product::class);
+        $this->authorize('view', Product::class);
 
         $product = Product::find($id);
 
@@ -78,7 +80,7 @@ class ProductController extends BaseController
 
     public function update(Request $request, Product $product)
     {
-        // $this->authorize('update', Product::class);
+        $this->authorize('update', Product::class);
 
         $input = $request->all();
 
@@ -86,7 +88,7 @@ class ProductController extends BaseController
             'name' => 'required',
             'description' => 'required',
             'price' => 'required',
-            
+
         ]);
 
         if ($validator->fails()) {
@@ -101,7 +103,7 @@ class ProductController extends BaseController
 
     public function destroy(Product $product): JsonResponse
     {
-        // $this->authorize('delete', Product::class);
+        $this->authorize('delete', Product::class);
 
         $product->delete();
 
