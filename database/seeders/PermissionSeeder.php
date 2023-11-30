@@ -17,6 +17,7 @@ class PermissionSeeder extends Seeder
             ['name' => 'Create users', 'description' => 'User with this role can add users', 'slug' => 'add-users'],
             ['name' => 'Edit users', 'description' => 'User with this role can edit users', 'slug' => 'edit-users'],
             ['name' => 'Delete users', 'description' => 'User with this role can delete users', 'slug' => 'delete-users'],
+            ['name' => 'View users', 'description' => 'User with this role can view users with its permissions', 'slug' => 'view-users'],
             ['name' => 'Assign users', 'description' => 'User with this role can assign roles for users', 'slug' => 'assign-users'],
             // ['name' => 'Create roles', 'description' => 'User with this role can add roles with its permissions', 'slug' => 'add-roles'],
             // ['name' => 'Edit roles', 'description' => 'User with this role can edit roles with its permissions', 'slug' => 'edit-roles'],

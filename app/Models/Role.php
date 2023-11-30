@@ -13,7 +13,7 @@ class Role extends Model
         'name', 'detail'
     ];
 
-    protected $appends = ['permission_ids', 'permission_slugs'];
+    // protected $appends = ['permission_ids', 'permission_slugs'];
 
     public function users()
     {

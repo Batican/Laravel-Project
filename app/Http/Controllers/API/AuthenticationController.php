@@ -4,6 +4,9 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CustomerRequest;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 
@@ -20,6 +23,18 @@ class AuthenticationController extends BaseController
         } else {
             return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
         }
+    }
+
+    public function register(CustomerRequest $request): JsonResponse
+    {
+
+        $payload = $request->validated();
+        $customerRole = Role::where('name', 'Customer')->first();
+        $payload['role_id'] = $customerRole->id;
+
+        $customer = User::create($payload);
+
+        return $this->sendResponse($customer, 'Registered successfully.');
     }
 
     public function me(Request $request): JsonResponse

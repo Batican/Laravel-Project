@@ -8,23 +8,13 @@ use Illuminate\Auth\Access\Response;
 class UserPolicy
 {
     /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
-    {
-        return $user->hasPermissions([
-            'add-users',
-            'edit-users',
-            'delete-users'
-        ]);
-    }
-
-    /**
      * Determine whether the user can view the model.
      */
     public function view(User $user): bool
     {
-        //
+        return $user->hasPermissions([
+            'view-users'
+        ]);
     }
 
     /**

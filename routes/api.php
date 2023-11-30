@@ -22,14 +22,13 @@ use App\Http\Controllers\API\ProductController;
 // });
 
 Route::post('login', [AuthenticationController::class, 'login']);
+Route::post('register', [AuthenticationController::class, 'register']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('me', [AuthenticationController::class, 'me']);
     Route::post('logout', [AuthenticationController::class, 'logout']);
 
     Route::resource('users', UserController::class);
-    Route::get('users-get-all', [UserController::class, 'getAll']);
     Route::patch('users/assign-role/{user}', [UserController::class, 'assignRole']);
     Route::resource('products', ProductController::class);
-    Route::get('products-get-all', [ProductController::class, 'getAll']);
 });

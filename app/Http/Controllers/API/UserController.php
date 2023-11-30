@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -10,62 +11,25 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends BaseController
 {
-    public function index(Request $request)
+    public function index()
     {
-        $this->authorize('viewAny', User::class);
+        $this->authorize('view', User::class);
 
-        $users = User::query();
-
-        $per_page = $request->query('per_page') ? $request->query('per_page') : 10;
-        $sortBy = $request->query('sortBy');
-
-        if ($request->query('search_key')) {
-            $users->where(function ($query) use ($request) {
-                $query->where("first_name", 'LIKE', "%" . $request->query('search_key') . "%");
-                $query->orWhere("middle_name", 'LIKE', "%" . $request->query('search_key') . "%");
-                $query->orWhere("last_name", 'LIKE', "%" . $request->query('search_key') . "%");
-            });
-        }
-
-        if ($sortBy) {
-            foreach ($sortBy as $key => $sort) {
-                $users->orderBy($sort['key'], $sort['order']);
-            }
-        }
-
-        return $users->paginate($per_page);
-    }
-
-    public function getAll()
-    {
         return User::all();
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(UserRequest $request): JsonResponse
     {
         $this->authorize('create', User::class);
 
-        $input = $request->all();
-
-        $validator = Validator::make($input, [
-            'name' => 'required',
-            'email' => 'required|email',
-            'role_id' => 'nullable|exists:App\Models\Role,id',
-            'password' => 'required|min:7|regex:/[@$!%*#?&]/|required_with:confirm_password|same:confirm_password'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
-
-        $user = User::create($input);
+        $user = User::create($request->validated());
 
         return $this->sendResponse($user, 'User created successfully.');
     }
 
     public function show($id): JsonResponse
     {
-        $this->authorize('viewAny', User::class);
+        $this->authorize('view', User::class);
 
         $user = User::find($id);
 
@@ -76,37 +40,24 @@ class UserController extends BaseController
         return $this->sendResponse($user, 'User retrieved successfully.');
     }
 
-    public function update(Request $request, User $user)
+    public function update(UserRequest $request, User $user)
     {
         $this->authorize('update', User::class);
 
-        $input = $request->all();
+        $validated = $request->validated();
 
-        $validator = Validator::make($input, [
-            'name' => 'required',
-            'email' => 'required|email',
-            'role_id' => 'nullable|exists:App\Models\Role,id',
-            'password' => 'required|min:7|regex:/[@$!%*#?&]/|required_with:confirm_password|same:confirm_password'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
+        if (!isset($request['password'])) {
+            unset($request['password']);
         }
 
-        if (!isset($input['password'])) {
-            unset($input['password']);
-        }
-
-        $user->update($input);
+        $user->update($validated);
 
         return $this->sendResponse($user, 'User updated successfully.');
     }
 
-    public function assignRole(User $user, Request $request)
+    public function assignRole(User $user, UserRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'role_id' => 'required|exists:App\Models\Role,id',
-        ]);
+        $validated = $request->validated();
 
         $user->update([
             'role_id' => $request->role_id

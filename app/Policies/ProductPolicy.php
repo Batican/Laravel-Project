@@ -4,20 +4,10 @@ namespace App\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Log;
 
 class ProductPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
-    {
-        return $user->hasPermissions([
-            'add-products',
-            'edit-products',
-            'delete-products'
-        ]);
-    }
 
     /**
      * Determine whether the user can view the model.
